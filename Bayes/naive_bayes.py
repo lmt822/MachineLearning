@@ -1,6 +1,7 @@
 # Mengtian Li
 # Comp135 a2
 # Oct 10 2015
+# Naive_bayes.py
 import sys
 import os
 import re
@@ -78,9 +79,9 @@ def split_data(data_files, index_list):
 	return to_rtn
 # Given frequency list and total number of tokens, calculate with
 # probability and smooth with m and vocabulary size
-def calculate_prob(token_freq, token_count, m, v):
+def calculate_prob(token_freq, token_count):
 	for element in token_freq:
-		element[1] = float(element[1] + m) / float(token_count + m*v)
+		element[1] = float(element[1]) / float(token_count)
 
 # input file should include a file that specifies the index
 # for training set.(Assume all in boundry)
@@ -88,20 +89,33 @@ def calculate_prob(token_freq, token_count, m, v):
 # 1: path to data files
 # 2: training index file
 # 3: test index file
-# 4: m as factor for smoothing
 def main():
 	# Read from file
+	# list with data inside and each index correspond to the number of clean files
+	# only read in files that is specified in the second argument
 	data_files = []
+	# list with training data specified by training index list and each index correspond to 
+	# the number of clean files
 	training_data = []
+	# similar as training data
 	test_data = []
+	# training index that are specified by argument
 	training_index = []
+	# similar as training index
 	test_index = []
+	# text file with positive index read from index.full or index.short
 	positive_index = []
+	# similar as positive index
 	negative_index = []
+	# Parsed token list that has positive labels in training file
 	positive_token_list = []
+	# similar to positive token list
 	negative_token_list = []
+	# each element is a vector of the token and its frequency(probabililty)
 	positive_token_freq = []
+	# similar to negative token list
 	negative_token_freq = []
+	# test score to hold the text name, positive score, negative score as vector
 	test_score = []
 	read_index(sys.argv[2], training_index)
 	read_index(sys.argv[3], test_index)
@@ -111,7 +125,6 @@ def main():
 	test_data = split_data(data_files, test_index)
 	# short or full
 	read_class(sys.argv[1], positive_index, negative_index, "index.short")
-	m = int(sys.argv[4])
 	# parse training data
 	parse_tokens(training_data, positive_index, positive_token_list, training_index)
 	parse_tokens(training_data, negative_index, negative_token_list, training_index)
@@ -124,8 +137,8 @@ def main():
 	# token_size used to calculate vocab size
 	p_token_size = calculate_freq(positive_token_list, positive_token_freq)
 	n_token_size = calculate_freq(negative_token_list, negative_token_freq)
-	vocab_size = p_token_size + n_token_size
-	# calculate score for each test data
+	calculate_prob(positive_token_freq, len(positive_token_list))
+	calculate_prob(negative_token_freq, len(negative_token_list))	# calculate score for each test data
 	for text in test_data:
 		if text == None:
 			continue

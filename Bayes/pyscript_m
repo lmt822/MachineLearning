@@ -1,0 +1,3 @@
+#!/bin/csh
+#pyscript_m
+python Cross_Validation_m.py pp2/sport index_list_full_sport.txt

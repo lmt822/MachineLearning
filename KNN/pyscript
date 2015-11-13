@@ -1,0 +1,27 @@
+export WEKADATA=$1
+FILES=$1/*
+#Get File names with feature no. stored in X
+i=0
+j=0
+for f in $FILES
+do
+case $f in
+	*train_norm.arff) 
+		fname=`basename $f`
+		TRAIN[i]=$fname
+		X[i]=$(echo $fname | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//')
+		let i+=1;;	
+	*test_norm.arff) 
+		fname=`basename $f`
+		TEST[j]=$fname
+		let j+=1;;
+esac
+done
+i=0
+#Assume the number of test is the same as the number of train data
+#Get Accuracy in Y
+for data in "${TRAIN[@]}"
+do
+echo $(python KNN_relief_feature_selection.py $WEKADATA/$data $WEKADATA/${TEST[i]} 5 10000)
+let i+=1
+done > KNN5_feature_selection.txt

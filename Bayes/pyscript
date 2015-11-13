@@ -1,0 +1,12 @@
+#!/bin/csh
+#pyscript
+for i in {0..1}
+do
+echo $i
+python Cross_Validation.py pp2/ibmmac index_list_full_ibm.txt $i
+done
+for i in {0..1}	
+do
+echo $i
+python Cross_Validation.py pp2/sport index_list_full_sport.txt $i
+done

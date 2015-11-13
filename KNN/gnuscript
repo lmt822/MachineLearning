@@ -1,0 +1,11 @@
+#Set conf file
+echo "set terminal png truecolor
+set title \"Accuracy wrt different m\"
+set output \"m.png\"
+set style data lines
+set xlabel 'value of m'
+set ylabel 'Accuracy'
+plot \"m_feature_selection.txt\" using 1:2 title \"featurn_selection\", \"m_weighted_dist.txt\" using 1:2 title \"weighted dist\"" > conf
+gnuplot
+# Manually type load 'conf'
+

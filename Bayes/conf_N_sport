@@ -1,0 +1,7 @@
+set terminal png truecolor
+set title "Accuracy wrt different training set size for sport"
+set output "N_test_sport.png"
+set style data lines
+set xlabel 'size of training set'
+set ylabel 'Accuracy'
+plot "N_test_sport.txt" using 1:2:3 with yerrorlines title "m=0","N_test_sport_smooth.txt" using 1:2:3 with yerrorlines title "m=1" 

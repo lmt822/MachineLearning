@@ -1,7 +1,7 @@
 # Mengtian Li
 # Comp135 a2
 # Oct 10 2015
-# Cross_Validation.py
+# Cross_Validation_m.py
 import sys
 import os
 import re
@@ -111,22 +111,17 @@ def stdev(data):
 # 3: m as smoothing factor
 def main():
 	# Read from file
-	# This is for the first test
-	for N in [0.1, 0.2, 0.3, 0.4 ,0.5, 0.6, 0.7, 0.8, 0.9, 1]:
-		# list with data inside and each index correspond to the number of clean files
-		# only read in files that is specified in the second argument
+	N = 0.5
+	for m in [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
 		data_files = []
 		positive_index = []
 		negative_index = []
 		index_list = []	
-		# k_fold_list initially has two lists as element inside. Each list hold positive
-		# index or negative index. Initilization comes later after read arguments
 		k_fold_list = [[] for i in range(2)]
 		read_index(sys.argv[2], index_list)
 		data_files = read_files(sys.argv[1], index_list)
-		m = int(sys.argv[3])
-		# prepare for 10-fold, get two list with positive text index and negative
-		# text index
+		# prepare for 10-fold, get two list with positive text and negative
+		# text 
 		read_class(sys.argv[1], positive_index, negative_index, "index.Full")
 		for index in index_list:
 			if index in positive_index:
@@ -163,7 +158,6 @@ def main():
 		k_fold_list.pop(0)
 		
 		# Run the cross validation
-		# Algorithm is same as implemented in naive_bayes.py
 		accuracies = []
 		for i in range(0, 10):
 			training_data = []
@@ -176,7 +170,7 @@ def main():
 			negative_token_freq = []
 			test_score = []
 
-			# each time test index is 1 fold, training index is the rest of folds
+			
 			test_index = k_fold_list[i]
 			for k in range(0, 10):
 				if k != i:
@@ -216,13 +210,9 @@ def main():
 					temp_score = []
 					temp_score.append(test_data.index(text))
 					temp_text = text.split()
-					# calculate positive score
-					# with smooth
+					# calculate positive score with smooth
 					sum = math.log(P_positive)
 					for token in temp_text:
-						# check if a token has been seen in current class
-						# if not seen in current class but seen in the other
-						# record 0 count for that token
 						check = 1
 						for element in positive_token_freq:
 							if element[0] == token:
@@ -262,6 +252,5 @@ def main():
 					num_correct += 1
 			accuracy = float(num_correct) / float(len(test_index))
 			accuracies.append(accuracy)
-			to_print = str(N) + 'N'
-		print to_print, mean(accuracies), stdev(accuracies)
+		print m, mean(accuracies), stdev(accuracies)
 main()

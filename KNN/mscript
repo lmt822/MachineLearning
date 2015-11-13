@@ -1,0 +1,4 @@
+for m in {100,200,300,400,500,600,700,800,900,1000}
+do
+python KNN_relief_weighted_dist.py data/94_train_norm.arff data/94_test_norm.arff 5 $m
+done > m_weighted_dist.txt

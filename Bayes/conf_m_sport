@@ -1,0 +1,7 @@
+set terminal png truecolor
+set title "Accuracy wrt different smoothing for sport"
+set output "m_test_sport.png"
+set style data lines
+set xlabel 'value of m'
+set ylabel 'Accuracy'
+plot "m_test_sport.txt" using 1:2:3 with yerrorlines title "accuracy"
